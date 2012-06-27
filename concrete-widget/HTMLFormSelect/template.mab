@@ -1,0 +1,11 @@
+select :class => @css_class, :name => @name, :id => @id do
+  @options.each do |option_attr|
+    if option_attr.is_a? String
+      option option_attr
+    elsif option_attr.is_a? Hash
+      option_value = option_attr[:option]
+      option_attr.delete(:option)
+      option option_value, option_attr
+    end
+  end unless @options.nil?
+end

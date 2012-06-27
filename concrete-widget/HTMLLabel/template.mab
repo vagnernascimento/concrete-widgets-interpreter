@@ -1,0 +1,1 @@
+label @content, :for => @label_for, :class => @css_class
