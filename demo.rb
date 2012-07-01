@@ -46,9 +46,6 @@ require  "concrete-widget/Interpreter.rb"
                     
                     },
                     {
-                      :node_content => {:concrete_widget => "HTMLLineBreak"},
-                    },
-                    {
                       :name => 'label_input2',
                       :node_content => {:concrete_widget => "HTMLLabel", :params => {:content => "Field2:"}},
                     
@@ -57,11 +54,6 @@ require  "concrete-widget/Interpreter.rb"
                     {
                       :name => 'long_text',
                       :node_content => {:concrete_widget => "HTMLFormText", :params => {:id => "xpto", :content => "Lorem Ypsum"}},
-                    
-                    },
-                     {
-                      :name => 'line_break',
-                      :node_content => {:concrete_widget => "HTMLLineBreak"},
                     
                     },
                     {
@@ -86,7 +78,8 @@ require  "concrete-widget/Interpreter.rb"
     } 
     
     extensions= [
-      {:name => 'ext1', :extension => 'JqueryCopyTo', :nodes => ['select1', 'label_input2'], :params => {:number => 2, :content => 'My new heading'}}
+      {:name => 'ext1', :extension => 'JqueryCopyTo', :nodes => ['select1', 'label_input2'], :params => {:number => 2, :content => 'My new heading'}},
+      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['input1', 'select1'], :params => {}}
     ]
     
     interface = ConcreteWidget::Interface.new(interface_schema)

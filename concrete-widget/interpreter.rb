@@ -21,14 +21,6 @@ module ConcreteWidget
       @direct_ref_node
     end
     
-    def extensions(ext)
-      @extensions = ext
-    end
-    
-    def extensions
-      @extensions
-    end
-    
     # Returns a Ruby Tree version of the interface from a hash tree.
     def compose(hash_tree, counter = 0)
       begin
@@ -92,10 +84,14 @@ module ConcreteWidget
     end
     
     def extension_instance(name, params)
-      #load "extensions/#{name}/#{name}.rb"
-      require "extensions/#{name}/#{name}"
-      klass = eval(name)
-      klass.new(params) unless klass.nil?
+      begin
+        #load "extensions/#{name}/#{name}.rb"
+        require "extensions/#{name}/#{name}"
+        klass = eval(name)
+        klass.new(params) unless klass.nil?
+      rescue LoadError => e
+        return
+      end
     end
     
     # There are two categories of dependencies: explicit (where node Id is specified) and by type (searching the first node compatible).

@@ -63,6 +63,14 @@ module ConcreteWidget
       @css_class = css
     end
     
+    def parent=(parent)
+      @parent = parent
+    end
+    
+    def parent
+      @parent
+    end
+    
     def extensions
       @extensions
     end
@@ -101,13 +109,6 @@ module ConcreteWidget
   end
   
   class Extension < WidgetBase
-    def parent=(parent)
-      @parent = parent
-    end
-    
-    def parent
-      @parent
-    end
     
     def render(params={})
       require "tilt"
