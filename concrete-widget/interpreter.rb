@@ -9,11 +9,24 @@ module ConcreteWidget
   class Interface
     
     def initialize(hash_tree)
+      @direct_ref_node = Hash.new
       @tree = compose(hash_tree)
     end
     
     def tree
       @tree
+    end
+    
+    def direct_ref_node
+      @direct_ref_node
+    end
+    
+    def extensions(ext)
+      @extensions = ext
+    end
+    
+    def extensions
+      @extensions
     end
     
     # Returns a Ruby Tree version of the interface from a hash tree.
@@ -28,9 +41,10 @@ module ConcreteWidget
         node_content[:params] ||= {}
         node_content[:params][:name] ||= name
         node_content[:params][:id] ||= name
+        node_content[:params][:extensions] = []
         content = widget_instance(node_content[:concrete_widget], node_content[:params])
         node = Tree::TreeNode.new(name, content)
-        
+        @direct_ref_node[name] = node
         children.each do |child|
           node << compose(child, counter)
         end if children
@@ -42,6 +56,21 @@ module ConcreteWidget
     end
     
     
+    def add_extensions(extensions)
+      @extensions = extensions
+      @extensions.each{ |ext|
+        ext[:nodes].each{ |node|
+          ext[:params][:index] = ext[:nodes].index(node)
+          name = ext[:name] or ext[:params][:index]
+          ext[:params][:name] ||= name
+          ext[:params][:id] ||= name   
+          instance = extension_instance(ext[:extension], ext[:params]) 
+          instance = widget_instance(ext[:extension], ext[:params]) if instance.nil?
+          direct_ref_node[node].content.add_extension( instance ) 
+        }
+      }
+    end
+    
     # Run a Depth-first search (DFS) L -> R to render a interface
     def render(tree=nil)
       tree = @tree if tree.nil?
@@ -49,14 +78,22 @@ module ConcreteWidget
         node.parent.content << render(node)
       } if tree.has_children?
       check_dependencies(tree)
+      #return tree.content.render << render_extensions(tree) if tree.content.respond_to?(:render)
       return tree.content.render if tree.content.respond_to?(:render)
     end
     
     private
     
     def widget_instance(name, params)
-      require "concrete-widget/#{name}/#{name}"
       #load "concrete-widget/#{name}/#{name}.rb"
+      require "concrete-widget/#{name}/#{name}"
+      klass = eval(name)
+      klass.new(params) unless klass.nil?
+    end
+    
+    def extension_instance(name, params)
+      #load "extensions/#{name}/#{name}.rb"
+      require "extensions/#{name}/#{name}"
       klass = eval(name)
       klass.new(params) unless klass.nil?
     end
@@ -82,5 +119,7 @@ module ConcreteWidget
         end
 
     end
+    
+    
   end
 end    

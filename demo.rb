@@ -85,8 +85,17 @@ require  "concrete-widget/Interpreter.rb"
       ]
     } 
     
+    extensions= [
+      {:name => 'ext1', :extension => 'JqueryCopyTo', :nodes => ['select1', 'label_input2'], :params => {:number => 2, :content => 'My new heading'}}
+    ]
+    
     interface = ConcreteWidget::Interface.new(interface_schema)
-
+    
+   
+    interface.add_extensions(extensions)
+     interface.direct_ref_node["label_input2"].content.extensions 
+    #puts interface.direct_ref_node["first_heading"]
+    
     File.open "demo-page.html", "w" do |file|  
       file.write interface.render
     end  
