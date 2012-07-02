@@ -1,1 +1,4 @@
-index = <%= @index %> - @id = <%= @id %> - parent = <%=@parent.id%>
+<script>
+  $('#<%= @params[:from] or @parent.id %>').change(function(){ $('#<%= @params[:to]%>').val(this.value) });
+</script>
+

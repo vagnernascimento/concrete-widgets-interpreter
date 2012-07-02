@@ -53,7 +53,7 @@ require  "concrete-widget/Interpreter.rb"
                     
                     {
                       :name => 'long_text',
-                      :node_content => {:concrete_widget => "HTMLFormText", :params => {:id => "xpto", :content => "Lorem Ypsum"}},
+                      :node_content => {:concrete_widget => "HTMLFormText", :params => {:content => "Lorem Ypsum"}},
                     
                     },
                     {
@@ -61,6 +61,7 @@ require  "concrete-widget/Interpreter.rb"
                       :node_content => {:concrete_widget => "HTMLFormSelect", :params => {:options => [{:option => 'first', :value => 'First'},"second",{:option => 'Last', :value => 'Last', :selected => true}] }},
                     
                     },
+                    
                      {
                       :name => 'sendbnt',
                       :node_content => {:concrete_widget => "HTMLFormButton", :params => {:content => "Send"}},
@@ -78,16 +79,13 @@ require  "concrete-widget/Interpreter.rb"
     } 
     
     extensions= [
-      {:name => 'ext1', :extension => 'JqueryCopyTo', :nodes => ['select1', 'label_input2'], :params => {:number => 2, :content => 'My new heading'}},
-      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['input1', 'select1'], :params => {}}
+      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['input1', 'select1'], :params => {}},
+      {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['datepicker1','select1'], :params => {:to => 'long_text'}},
     ]
     
     interface = ConcreteWidget::Interface.new(interface_schema)
-    
    
     interface.add_extensions(extensions)
-     interface.direct_ref_node["label_input2"].content.extensions 
-    #puts interface.direct_ref_node["first_heading"]
     
     File.open "demo-page.html", "w" do |file|  
       file.write interface.render

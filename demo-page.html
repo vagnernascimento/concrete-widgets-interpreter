@@ -24,17 +24,23 @@
 <div id="composition1" class="box">
     <label for="date1" class="nada">Initial Date: </label><input type="text" id="novo_id1" name="date1" value="06/26/2012" class="">
 <script>$(function() { $( "#novo_id1" ).datepicker(); });</script>
+
+<script>
+  $('#novo_id1').change(function(){ $('#long_text').val(this.value) });
+</script>
+
 <p id="paragraph2" class="parag1">Something more here<form action="http://www.google.com" class="box1" name="comp1" id="comp1" method="post">
   <div id="comp2" class="box1">
     Lorem Ypsum
 </div>
 <label for="" class="">Field1:</label><input type="text" class="" name="input1" id="input1" value="Lorem Ypsum"/>
-<br class="" id="ext2"/><label for="" class="">Field2:</label>
-index = 1 - @id = ext1 - parent = label_input2
-<textarea class="" name="long_text" id="xpto">Lorem Ypsum</textarea><select class="" name="select1" id="select1"><option value="First">first</option><option>second</option><option value="Last" selected="selected">Last</option></select>
-index = 0 - @id = ext1 - parent = select1
+<br class="" id="ext2"/><label for="" class="">Field2:</label><textarea class="" name="long_text" id="long_text">Lorem Ypsum</textarea><select class="" name="select1" id="select1"><option value="First">first</option><option>second</option><option value="Last" selected="selected">Last</option></select>
+<br class="" id="ext2"/>
+<script>
+  $('#select1').change(function(){ $('#long_text').val(this.value) });
+</script>
 
-<br class="" id="ext2"/><input type="submit" class="" name="sendbnt" id="sendbnt" value="Send"/>
+<input type="submit" class="" name="sendbnt" id="sendbnt" value="Send"/>
 </form>
   
 </p>

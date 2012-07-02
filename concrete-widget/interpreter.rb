@@ -70,7 +70,6 @@ module ConcreteWidget
         node.parent.content << render(node)
       } if tree.has_children?
       check_dependencies(tree)
-      #return tree.content.render << render_extensions(tree) if tree.content.respond_to?(:render)
       return tree.content.render if tree.content.respond_to?(:render)
     end
     
