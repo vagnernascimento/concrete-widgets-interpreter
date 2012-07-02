@@ -2,7 +2,7 @@
 # Author:: Vagner Nascimento (vagnernascimento@gmail.com)
 
 module ConcreteWidget
-  #VERSION '0.1.1'
+  #VERSION '0.1.2'
   require "rubygems"
   require "concrete-widget/widget-base"
 
@@ -58,7 +58,8 @@ module ConcreteWidget
           ext[:params][:id] ||= name   
           instance = extension_instance(ext[:extension], ext[:params]) 
           instance = widget_instance(ext[:extension], ext[:params]) if instance.nil?
-          direct_ref_node[node].content.add_extension( instance ) 
+          direct_ref_node[node].content.add_extension( instance )
+          check_extension_dependencies(instance)
         }
       }
     end
@@ -104,17 +105,32 @@ module ConcreteWidget
             # When no node ID is directly specified, the first node found compatible will be selected
             condition = Proc.new{|node| node.content.class.to_s == tree.content.dependencies.first.to_s} 
           end
-          tree.root.each{|node| 
+          @direct_ref_node.each{|i,node| 
             if condition.call(node)
               tree.content.run_dependencies(node.content)
               return
             end
           }
-          
         end
-
     end
     
+    def check_extension_dependencies(ext)
+      if ext.respond_to?(:dependencies)
+        if ext.respond_to?(:depends_on_ids) and not ext.depends_on_ids.nil?
+          # Node ID is directly specified
+          condition = Proc.new{|node| node.name == ext.depends_on_ids.first}
+        else 
+          # When no node ID is directly specified, the first node found compatible will be selected
+          condition = Proc.new{|node| node.content.class.to_s == ext.dependencies.first.to_s} 
+        end
+        @direct_ref_node.each{|i,node| 
+          if condition.call(node)
+            ext.run_dependencies(node.content)
+            return
+          end
+        }
+      end
+    end
     
   end
 end    

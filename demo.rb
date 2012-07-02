@@ -31,11 +31,6 @@ require  "concrete-widget/Interpreter.rb"
                   :node_content => {:concrete_widget => "HTMLForm", :params => {:action => "http://www.google.com", :css_class => "box1"}},
                   :children => [
                     {
-                      :name => 'comp2',
-                      :node_content => {:concrete_widget => "HTMLComposition", :params => {:content => "Lorem Ypsum", :css_class => "box1"}},
-                    
-                    },
-                    {
                       :name => 'label_input1',
                       :node_content => {:concrete_widget => "HTMLLabel", :params => {:content => "Field1:"}},
                     
@@ -50,19 +45,17 @@ require  "concrete-widget/Interpreter.rb"
                       :node_content => {:concrete_widget => "HTMLLabel", :params => {:content => "Field2:"}},
                     
                     },
+                    {
+                      :name => 'select1',
+                      :node_content => {:concrete_widget => "HTMLFormSelect", :params => {:options => [{:option => 'first', :value => 'First'},"second",{:option => 'Last', :value => 'Last', :selected => true}] }},
                     
+                    },
                     {
                       :name => 'long_text',
                       :node_content => {:concrete_widget => "HTMLFormText", :params => {:content => "Lorem Ypsum"}},
                     
                     },
                     {
-                      :name => 'select1',
-                      :node_content => {:concrete_widget => "HTMLFormSelect", :params => {:options => [{:option => 'first', :value => 'First'},"second",{:option => 'Last', :value => 'Last', :selected => true}] }},
-                    
-                    },
-                    
-                     {
                       :name => 'sendbnt',
                       :node_content => {:concrete_widget => "HTMLFormButton", :params => {:content => "Send"}},
                     
@@ -79,8 +72,8 @@ require  "concrete-widget/Interpreter.rb"
     } 
     
     extensions= [
-      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['input1', 'select1'], :params => {}},
-      {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['datepicker1','select1'], :params => {:to => 'long_text'}},
+      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['input1', 'select1', 'long_text'], :params => {}},
+      {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['input1', 'select1'], :params => {:to => 'long_text'}},
     ]
     
     interface = ConcreteWidget::Interface.new(interface_schema)
