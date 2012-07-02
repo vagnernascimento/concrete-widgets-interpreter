@@ -44,11 +44,17 @@ Usage
           
           },
           { :name => "datepicker1",
-              :node_content => { :concrete_widget => "JQueryDatePickerInput", :params => {:name => "date1", :id => "novo_id1", :content => "06/26/2012" }}
+              :node_content => { 
+                :concrete_widget => "JQueryDatePickerInput",
+                :params => {:name => "date1", :id => "novo_id1", :content => "06/26/2012" }
+              }
           },
           {
             :name => 'select1',
-            :node_content => {:concrete_widget => "HTMLFormSelect", :params => {:options => [{:option => 'first', :value => 'First'},"second"] }},
+            :node_content => {
+              :concrete_widget => "HTMLFormSelect",
+              :params => {:options => [{:option => 'first', :value => 'First'},"second"] }
+            },
           
           },
           {
@@ -66,7 +72,10 @@ Usage
     
     extensions= [
       {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['select1']},
-      {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['datepicker1', 'select1'], :params => {:to => 'long_text'}}
+      { :name => 'ext1', :extension => 'JQueryCopyTo',
+        :nodes => ['datepicker1', 'select1'],
+        :params => {:to => 'long_text'}
+      }
     ]
     
     interface = ConcreteWidget::Interface.new(interface_schema)
