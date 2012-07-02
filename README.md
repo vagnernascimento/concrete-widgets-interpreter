@@ -38,17 +38,17 @@ Usage
               :params => {:number => 1, :content => "First heading"}
             }
           },
-          { :name => "datepicker1",
-              :node_content => { :concrete_widget => "JQueryDatePickerInput", :params => {:name => "date1", :id => "novo_id1", :content => "06/26/2012", :depends_on_ids => ["main_page"] }}
-          },
           {
             :name => 'label1',
-            :node_content => {:concrete_widget => "HTMLLabel", :params => {:content => "Field1:"}},
+            :node_content => {:concrete_widget => "HTMLLabel", :params => {:content => "Date:"}},
           
+          },
+          { :name => "datepicker1",
+              :node_content => { :concrete_widget => "JQueryDatePickerInput", :params => {:name => "date1", :id => "novo_id1", :content => "06/26/2012" }}
           },
           {
             :name => 'select1',
-            :node_content => {:concrete_widget => "HTMLFormSelect", :params => {:options => [{:option => 'first', :value => 'First'},"second",{:option => 'Last', :value => 'Last', :selected => true}] }},
+            :node_content => {:concrete_widget => "HTMLFormSelect", :params => {:options => [{:option => 'first', :value => 'First'},"second"] }},
           
           },
           {
@@ -58,7 +58,7 @@ Usage
           },
           {
             :name => 'long_text',
-            :node_content => {:concrete_widget => "HTMLFormText", :params => {:content => "Lorem Ypsum"}},
+            :node_content => {:concrete_widget => "HTMLFormInput", :params => {:content => "Lorem Ypsum"}},
           }
         ]
       }]
@@ -71,6 +71,6 @@ Usage
     
     interface = ConcreteWidget::Interface.new(interface_schema)
     interface.add_extensions(extensions)
-    File.open "demo-page2.html", "w" do |file|  
+    File.open "demo-page.html", "w" do |file|  
       file.write interface.render
     end 
