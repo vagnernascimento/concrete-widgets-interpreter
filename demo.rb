@@ -72,7 +72,7 @@ require  "concrete-widget/Interpreter.rb"
     } 
     
     extensions= [
-      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['input1', 'select1', 'long_text'], :params => {}},
+      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['input1', 'select1', 'long_text']},
       {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['input1', 'select1'], :params => {:to => 'long_text'}},
     ]
     

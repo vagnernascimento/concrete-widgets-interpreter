@@ -37,11 +37,40 @@ Usage
               :concrete_widget => "HTMLHeading",
               :params => {:number => 1, :content => "First heading"}
             }
+          },
+          { :name => "datepicker1",
+              :node_content => { :concrete_widget => "JQueryDatePickerInput", :params => {:name => "date1", :id => "novo_id1", :content => "06/26/2012", :depends_on_ids => ["main_page"] }}
+          },
+          {
+            :name => 'label1',
+            :node_content => {:concrete_widget => "HTMLLabel", :params => {:content => "Field1:"}},
+          
+          },
+          {
+            :name => 'select1',
+            :node_content => {:concrete_widget => "HTMLFormSelect", :params => {:options => [{:option => 'first', :value => 'First'},"second",{:option => 'Last', :value => 'Last', :selected => true}] }},
+          
+          },
+          {
+            :name => 'label2',
+            :node_content => {:concrete_widget => "HTMLLabel", :params => {:content => "Long text:"}},
+          
+          },
+          {
+            :name => 'long_text',
+            :node_content => {:concrete_widget => "HTMLFormText", :params => {:content => "Lorem Ypsum"}},
           }
         ]
       }]
     }
+    
+    extensions= [
+      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['select1']},
+      {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['datepicker1', 'select1'], :params => {:to => 'long_text'}}
+    ]
+    
     interface = ConcreteWidget::Interface.new(interface_schema)
-    File.open "demo-page.html", "w" do |file|  
+    interface.add_extensions(extensions)
+    File.open "demo-page2.html", "w" do |file|  
       file.write interface.render
     end 

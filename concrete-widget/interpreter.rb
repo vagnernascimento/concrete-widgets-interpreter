@@ -51,6 +51,7 @@ module ConcreteWidget
     def add_extensions(extensions)
       @extensions = extensions
       @extensions.each{ |ext|
+        ext[:params] ||= {}
         ext[:nodes].each{ |node|
           ext[:params][:index] = ext[:nodes].index(node)
           name = ext[:name] or ext[:params][:index]
