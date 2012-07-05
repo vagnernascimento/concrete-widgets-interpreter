@@ -56,6 +56,11 @@ require  "concrete-widget/Interpreter.rb"
                     
                     },
                     {
+                      :name => 'checks',
+                      :node_content => {:concrete_widget => "HTMLFormCheck", :params => {:options => ['Yes', 'No',{:label => 'Other', :value => 'O'}], :label_side => 'left'}},
+                    
+                    },
+                    {
                       :name => 'sendbnt',
                       :node_content => {:concrete_widget => "HTMLFormButton", :params => {:content => "Send"}},
                     
