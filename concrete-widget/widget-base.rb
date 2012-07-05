@@ -8,7 +8,7 @@ module ConcreteWidget
     
     def initialize(params)
       @content  = params[:content] || ""
-      @css_class = params[:css_class] || ""
+      @css_class = params[:css_class] 
       @name = params[:name]
       @params  = params
       @id = params[:id]

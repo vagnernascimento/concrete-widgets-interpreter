@@ -1,0 +1,20 @@
+ul :class => @css_class, :id => @id do
+  
+  @items.each do | item_attr|
+    if item_attr.is_a? String
+      li item_attr
+    elsif item_attr.is_a? Hash
+      value = item_attr[:value]
+      item_attr.delete(:value)
+      url = item_attr[:url]
+      item_attr.delete(:url)   
+      li item_attr do
+        unless url.nil?
+          a value, :href => url
+        else
+          value
+        end
+      end
+    end
+  end unless @items.nil?
+end
