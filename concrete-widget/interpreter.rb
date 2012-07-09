@@ -10,7 +10,9 @@ module ConcreteWidget
     
     def initialize(hash_tree)
       @direct_ref_node = Hash.new
+      @node_index_counter = 0
       @tree = compose(hash_tree)
+      
     end
     
     def tree
@@ -20,27 +22,18 @@ module ConcreteWidget
     def direct_ref_node
       @direct_ref_node
     end
-    
+        
     # Returns a Ruby Tree version of the interface from a hash tree.
-    def compose(hash_tree, counter = 0)
+    def compose(hash_tree)
       begin
-        counter+=1
         require "tree"
-        name = hash_tree[:name] or hash_tree["name"]
-        name =  counter.to_s if name.nil?
-        node_content = hash_tree[:node_content] or hash_tree["node_content"]
-        children = hash_tree[:children] or hash_tree["children"]
-        node_content[:params] ||= {}
-        node_content[:params][:name] ||= name
-        node_content[:params][:id] ||= name
-        node_content[:params][:extensions] = []
-        content = widget_instance(node_content[:concrete_widget], node_content[:params])
-        node = Tree::TreeNode.new(name, content)
-        @direct_ref_node[name] = node
-        children.each do |child|
-          node << compose(child, counter)
-        end if children
-
+        node, children = new_node_and_children(hash_tree)
+        if children
+          children = repeatable_children_nodes(children, node)
+          children.each do |child|
+            node << compose(child)
+          end 
+        end
         return node
       rescue LoadError => e
         warn "The Hash tree cannot be loaded"
@@ -131,6 +124,56 @@ module ConcreteWidget
           end
         }
       end
+    end
+    
+    
+    def new_node_and_children(hash_tree)
+      #-- Add properties
+      @node_index_counter+=1
+      
+      name = hash_tree[:name]
+      name =  rand(36**8).to_s(36)+ '_' + @node_index_counter.to_s if name.nil?
+      
+      node_content = hash_tree[:node_content]
+      node_content[:params] ||= {}
+      node_content[:params][:name] ||= name
+      node_content[:params][:id] ||= name
+      node_content[:params][:extensions] = []
+      children = hash_tree[:children]
+      #-- Widget instance
+      content = widget_instance(node_content[:concrete_widget], node_content[:params])
+      #-- Tree node
+      node = Tree::TreeNode.new(node_content[:params][:name], content)
+      node.content.params = node_content[:params]
+      #-- Direct reference for only performance porposes.
+      @direct_ref_node[node_content[:params][:name]] = node
+      return node, children
+    end
+    
+    def change_children_names(children, counter_parent, counter = 0)
+      children.each do |child|
+        child[:name] ||= rand(36**8).to_s(36)
+        child[:name] = child[:name] + '_'+ counter_parent.to_s + '_' + counter.to_s
+        #puts child.inspect
+        change_children_names(child[:children], counter_parent, counter + 1) unless child[:children].nil?
+      end
+    end
+    
+    def repeatable_children_nodes(children, current_node)
+      
+      if current_node.content.params[:repeatable] == true
+        c = 0
+        new_children = []
+        current_node.content.params[:times].times do
+          children_clone = Marshal.load( Marshal.dump(children) ) #== Clonning nodes
+          change_children_names(children_clone, c+=1)
+          new_children = new_children + children_clone
+        end
+        return new_children
+      else
+        children
+      end
+      
     end
     
   end

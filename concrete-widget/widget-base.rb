@@ -47,6 +47,10 @@ module ConcreteWidget
       @params
     end
     
+    def params=(params)
+      @params = params
+    end
+    
     def id
       @id
     end
