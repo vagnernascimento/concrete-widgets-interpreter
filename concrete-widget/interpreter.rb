@@ -150,12 +150,18 @@ module ConcreteWidget
       return node, children
     end
     
-    def change_children_names(children, counter_parent, counter = 0)
+    def populate_children(children, value, counter_parent, counter = 0)
       children.each do |child|
+        #-- Populate with new values
+        child[:node_content][:params] ||= {}
+        if not child[:name].nil? and value[child[:name].to_sym].is_a?(Hash)
+          child[:node_content][:params].merge!( value[child[:name].to_sym] )
+        end
+        #-- rename the node
         child[:name] ||= rand(36**8).to_s(36)
         child[:name] = child[:name] + '_'+ counter_parent.to_s + '_' + counter.to_s
-        #puts child.inspect
-        change_children_names(child[:children], counter_parent, counter + 1) unless child[:children].nil?
+        
+        populate_children(child[:children], value, counter_parent, counter + 1) unless child[:children].nil?
       end
     end
     
@@ -164,9 +170,9 @@ module ConcreteWidget
       if current_node.content.params[:repeatable] == true
         c = 0
         new_children = []
-        current_node.content.params[:times].times do
+        current_node.content.params[:values].each do | value |
           children_clone = Marshal.load( Marshal.dump(children) ) #== Clonning nodes
-          change_children_names(children_clone, c+=1)
+          populate_children(children_clone, value, c+=1)
           new_children = new_children + children_clone
         end
         return new_children
