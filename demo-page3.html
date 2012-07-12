@@ -5,18 +5,48 @@
       <TITLE>My Demo page </TITLE>
 	    
         <link type="text/css" href="css/screen.css" rel="stylesheet" />
+	    
+        <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
 	  
-      
+        
+        <script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
+	    
+        <script src="js/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>
+	  
 	  
    </HEAD>
    <BODY>
-      <div id="jg47c0k8_2" class="header">
+      <div id="om41trk2_2" class="header">
     <h1 id="first_heading" class="heading2">First heading </h1/>
 
 </div>
 <div id="composition1" class="box">
-    <label for="label1" class="">Name: </label>Fulano<label for="label1" class="">Age: </label>35<br class="" id="7fgahj19_1_0"/><label for="label1" class="">Name: </label>Beltrano<label for="label1" class="">Age: </label>53<br class="" id="kldnw0zp_2_0"/><label for="label1" class="">Name: </label>John<label for="label1" class="">Age: </label>46<br class="" id="cavfdii_3_0"/>
+    <label for="label1" class="">Name: </label>Fulano
+<br class="" id="ext2"/><label for="label1" class="">Age: </label><input type="text" class="" name="age_field_1_0" id="age_field_1_0" value="35"/>
+<br class="" id="ext2"/>
+<br class="" id="ext2"/>
+<script>
+  $('#age_field_1_0').change(function(){ $('#long_text').val(this.value) });
+</script>
+
+<label for="label1" class="">Name: </label>Beltrano
+<br class="" id="ext2"/><label for="label1" class="">Age: </label><input type="text" class="" name="age_field_2_0" id="age_field_2_0" value="53"/>
+<br class="" id="ext2"/>
+<br class="" id="ext2"/>
+<script>
+  $('#age_field_2_0').change(function(){ $('#long_text').val(this.value) });
+</script>
+
+<label for="label1" class="">Name: </label>John
+<br class="" id="ext2"/><label for="label1" class="">Age: </label><input type="text" class="" name="age_field_3_0" id="age_field_3_0" value="46"/>
+<br class="" id="ext2"/>
+<br class="" id="ext2"/>
+<script>
+  $('#age_field_3_0').change(function(){ $('#long_text').val(this.value) });
+</script>
+
+
 </div>
-	  
+<textarea class="" name="long_text" id="long_text"></textarea>	  
    </BODY>
 </HTML>

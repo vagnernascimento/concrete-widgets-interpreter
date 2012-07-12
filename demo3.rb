@@ -33,20 +33,27 @@ require  "concrete-widget/Interpreter.rb"
               :node_content => { :concrete_widget => "HTMLLabel", :params => {:label_for => "label1", :content => "Age: "}}
             },
             { :name => "age_field",
-              :node_content => { :concrete_widget => "HTMLText"}
-            },
-            { :node_content => {  :concrete_widget => "HTMLLineBreak"}
-            },
+              :node_content => { :concrete_widget => "HTMLFormInput"}
+            }
+            
             
           ]  
-        }
-      
+        },
+        {
+          :name => 'long_text',
+          :node_content => {:concrete_widget => "HTMLFormText"},
+        
+        },
       ]
     } 
     
+    extensions= [
+      {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['name_field', 'age_field', 'age_field' ]},
+      {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['age_field'], :params => {:to => 'long_text'}},
+    ]
     
     interface = ConcreteWidget::Interface.new(interface_schema)
-   
+    interface.add_extensions(extensions)
    
     File.open "demo-page3.html", "w" do |file|  
       file.write interface.render

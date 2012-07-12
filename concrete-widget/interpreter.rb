@@ -10,6 +10,7 @@ module ConcreteWidget
     
     def initialize(hash_tree)
       @direct_ref_node = Hash.new
+      @cloned_node_by_source = Hash.new
       @node_index_counter = 0
       @tree = compose(hash_tree)
       
@@ -52,7 +53,13 @@ module ConcreteWidget
           ext[:params][:id] ||= name   
           instance = extension_instance(ext[:extension], ext[:params]) 
           instance = widget_instance(ext[:extension], ext[:params]) if instance.nil?
-          direct_ref_node[node].content.add_extension( instance )
+          direct_ref_node[node].content.add_extension( instance ) unless direct_ref_node[node].nil?
+          #-- Cloned nodes
+          if @cloned_node_by_source[node].is_a?(Array)
+            @cloned_node_by_source[node].each{ |clone_name|
+              direct_ref_node[clone_name].content.add_extension( instance )
+            }
+          end
           check_extension_dependencies(instance)
         }
       }
@@ -145,23 +152,29 @@ module ConcreteWidget
       #-- Tree node
       node = Tree::TreeNode.new(node_content[:params][:name], content)
       node.content.params = node_content[:params]
-      #-- Direct reference for only performance porposes.
+      #-- Direct reference 
       @direct_ref_node[node_content[:params][:name]] = node
       return node, children
     end
     
-    def populate_children(children, value, counter_parent, counter = 0)
+    def populate_cloned_children(children, value, counter_parent, counter = 0)
       children.each do |child|
         #-- Populate with new values
         child[:node_content][:params] ||= {}
         if not child[:name].nil? and value[child[:name].to_sym].is_a?(Hash)
           child[:node_content][:params].merge!( value[child[:name].to_sym] )
         end
+        source_name = child[:name]
         #-- rename the node
         child[:name] ||= rand(36**8).to_s(36)
         child[:name] = child[:name] + '_'+ counter_parent.to_s + '_' + counter.to_s
         
-        populate_children(child[:children], value, counter_parent, counter + 1) unless child[:children].nil?
+        unless source_name.nil?
+          @cloned_node_by_source[source_name] ||= [] 
+          @cloned_node_by_source[source_name] << child[:name] unless child[:name].nil?
+        end
+        
+        populate_cloned_children(child[:children], value, counter_parent, counter + 1) unless child[:children].nil?
       end
     end
     
@@ -172,7 +185,7 @@ module ConcreteWidget
         new_children = []
         current_node.content.params[:values].each do | value |
           children_clone = Marshal.load( Marshal.dump(children) ) #== Clonning nodes
-          populate_children(children_clone, value, c+=1)
+          populate_cloned_children(children_clone, value, c+=1)
           new_children = new_children + children_clone
         end
         return new_children
