@@ -1,0 +1,1 @@
+hr :class => @css_class, :id => @id

@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+   <HEAD>
+      <TITLE>My Demo page </TITLE>
+	    
+        <link type="text/css" href="css/default_interface.css" rel="stylesheet" />
+	  
+        
+        <script src="js/tempo.min.js" type="text/javascript"></script>
+	    
+        <script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
+	    
+        <script src="js/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>
+	  
+	  
+   </HEAD>
+   <BODY>
+      <div id="header" class="header">
+    <h1 id="main_heading" class="heading2">Twitts about Web Interfaces </h1/>
+
+</div>
+<ol id="tweets">
+  <dd data-template style="display: none;">
+    <li class="row" id="twitt" title="" > <div id="columnA" class="column grid_4 user">
+    <img class="" id="profile_image_url" src="{{profile_image_url}}" data-src="{{profile_image_url}}" title="" />
+<h3 id="from_user" class="">{{from_user}} </h3/>
+
+</div>
+<p id="columnB" class="column grid_8">{{text}}<span class="time" id="created_at"> ,{{created_at | date '\at HH:mm on EEEE' }} </span>
+</p>
+ </li>
+
+  </dd>
+  <dd class="error" data-template-fallback>
+      Sorry
+  </dd>
+</ol>
+<script type="text/javascript" charset="utf-8">
+  var load_tweets;
+  $(document).ready(function() {
+    
+    var tpl_tweets = Tempo.prepare('tweets').notify(function(event) {
+        if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
+					$('ol#tweets').toggleClass('loading');
+				}
+			});
+   
+    load_tweets = function(){
+      tpl_tweets.starting();
+      var url_tweets;
+      
+        var url_tweets = $("#url_search_twitter").val();
+      
+      $.ajax({
+        url: url_tweets ? url_tweets : "http://search.twitter.com/search.json?q='web interfaces'&rpp=20&callback=?",
+        dataType: "json",
+        timeout: 7000,
+        success: function(data) {
+          tpl_tweets.render(data['results']);
+        },
+        error: function(data){$('ol#tweets').toggleClass('loading');$('ol#tweets .error').show();}
+      });
+    }
+    load_tweets();
+  });
+</script><div id="footer" class="">
+    <p id="footer_text" class="row">http://twigkit.github.com/tempo</p>
+
+</div>
+	  
+   </BODY>
+</HTML>
