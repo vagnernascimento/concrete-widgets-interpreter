@@ -1,0 +1,28 @@
+<script>
+   showResponse = function(responseText, statusText, xhr, $form)  { 
+    <% if @target.respond_to?(:js_handler) %>
+      <%= @target.js_handler %>(responseText);
+    <% end %>
+    }
+  $(document).ready(function() { 
+    var options = { 
+        target:        '#<%= @target.id %>',   // target element(s) to be updated with server response 
+        //beforeSubmit:  showRequest,  // pre-submit callback 
+        success:       showResponse,  // post-submit callback 
+ 
+        <% unless @params[:data_type].nil? %> dataType:  '<%= @params[:data_type]%>'   <% end %>     // 'xml', 'script', or 'json' (expected server response type) 
+        // other available options: 
+        //url:       url         // override for form's 'action' attribute 
+        //type:      type        // 'get' or 'post', override for form's 'method' attribute 
+        
+        //clearForm: true        // clear all form fields after successful submit 
+        //resetForm: true        // reset the form after successful submit 
+ 
+        // $.ajax options can be used here too, for example: 
+        //timeout:   5000 
+    }; 
+    $('#<%= @parent.id %>').ajaxForm(options);
+   
+}); 
+</script>
+

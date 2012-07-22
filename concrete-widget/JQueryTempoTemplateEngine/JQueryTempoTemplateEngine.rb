@@ -11,6 +11,10 @@ class JQueryTempoTemplateEngine < ConcreteWidget::WidgetBase
       @depends_on_ids = params[:depends_on_ids]
     end
     
+    def js_handler
+      "#{@id}_handler"
+    end
+    
     def dependencies
       ["HTMLPage"]
     end

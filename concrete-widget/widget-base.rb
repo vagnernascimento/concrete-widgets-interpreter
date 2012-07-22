@@ -74,6 +74,13 @@ module ConcreteWidget
     def parent
       @parent
     end
+    def target=(node)
+      @target = node
+    end
+    
+    def target
+      @target
+    end
     
     def extensions
       @extensions

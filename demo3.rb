@@ -49,7 +49,7 @@ require  "concrete-widget/Interpreter.rb"
     
     extensions= [
       {:name => 'ext2', :extension => 'HTMLLineBreak', :nodes => ['name_field', 'age_field', 'age_field' ]},
-      {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['age_field'], :params => {:to => 'long_text'}},
+      {:name => 'ext1', :extension => 'JQueryCopyTo', :nodes => ['age_field'], :params => {:target => 'long_text'}},
     ]
     
     interface = ConcreteWidget::Interface.new(interface_schema)

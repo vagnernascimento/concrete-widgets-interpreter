@@ -1,4 +1,4 @@
 <script>
-  $('#<%= @params[:from] or @parent.id %>').change(function(){ $('#<%= @params[:to]%>').val(this.value) });
+  $('#<%= @params[:from] or @parent.id %>').change(function(){ $('#<%= @target.id %>').val(this.value) });
 </script>
 

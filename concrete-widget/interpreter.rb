@@ -53,6 +53,7 @@ module ConcreteWidget
           ext[:params][:id] ||= name   
           instance = extension_instance(ext[:extension], ext[:params]) 
           instance = widget_instance(ext[:extension], ext[:params]) if instance.nil?
+          instance.target = direct_ref_node[ext[:params][:target]].content unless ext[:params][:target].nil?
           direct_ref_node[node].content.add_extension( instance ) unless direct_ref_node[node].nil?
           #-- Cloned nodes
           if @cloned_node_by_source[node].is_a?(Array)

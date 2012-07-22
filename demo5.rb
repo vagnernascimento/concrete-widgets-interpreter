@@ -9,7 +9,47 @@ require  "concrete-widget/Interpreter.rb"
           :children => [
             { :name => "main_heading",
               :node_content => { :concrete_widget => "HTMLHeading", :params => {:number => 1, 
-              :content => "Twitts about Web Interfaces", :css_class => "heading2"}}
+              :content => "Twitts about Anything", :css_class => "heading2"}}
+            }
+          ]
+        },
+        {
+          :name => 'form_search',
+          :node_content => {
+            :concrete_widget => "HTMLForm",
+            
+            :params => {:css_class => "box center", :action => "http://search.twitter.com/search.json?&callback=?", :method => "get"}
+          },
+          :children => [
+            {
+              :name => 'label_search',
+              :node_content => {:concrete_widget => "HTMLLabel", 
+              :params => {:content => "Search: "}},
+              
+            },
+            {
+              :name => 'query',
+              :node_content => {:concrete_widget => "HTMLFormInput", 
+              :params => {:name => 'q', :css_class => "input", :content => "web interfaces"}},
+              
+            },
+            {
+              :name => 'items_per_page_label',
+              :node_content => {:concrete_widget => "HTMLLabel", 
+              :params => {:content => "Items per page: "}},
+              
+            },
+            {
+              :name => 'items_per_page',
+              :node_content => {:concrete_widget => "HTMLFormSelect", 
+              :params => {:name => 'rpp', :css_class => "input", :options => ["5", "10", "15", "20", "25", "30"] }},
+              
+            },
+            {
+              :name => 'btn_send',
+              :node_content => {:concrete_widget => "HTMLFormButton",
+              :params => {:css_class => "input", :content => "Go"}},
+              
             }
           ]
         },
@@ -18,7 +58,7 @@ require  "concrete-widget/Interpreter.rb"
           :node_content => {
             :concrete_widget => "JQueryTempoTemplateEngine", 
             :params => {
-              :json_source_url => "http://search.twitter.com/search.json?q=web interfaces&rpp=80&callback=?",
+              #:json_source_url => "http://search.twitter.com/search.json?q=web interfaces&rpp=20&callback=?",
               :url_from_element_id => 'url_search_twitter',
               :node_json_result_element => "['results']", :msg_error => "Sorry"
             }
@@ -64,10 +104,14 @@ require  "concrete-widget/Interpreter.rb"
       ]
     } 
     
-
+    extensions= [
+      {:name => 'ext2', :extension => 'JQueryFormAjax', :nodes => ['form_search'], :params => {:target => "tweets"}},
+    ]
+    
     interface = ConcreteWidget::Interface.new(interface_schema)
+    interface.add_extensions(extensions)
    
-    File.open "demo-page4.html", "w" do |file|  
+    File.open "demo-page5.html", "w" do |file|  
       file.write interface.render
     end  
 

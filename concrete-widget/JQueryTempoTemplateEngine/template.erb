@@ -2,22 +2,15 @@
   <dd data-template style="display: none;">
     <%= @content %>
   </dd>
-  <dd class="error" data-template-fallback>
+  <dd class="error" data-template-fallback style="display: none;">
       <%= @msg_error %>
   </dd>
 </ol>
 <script type="text/javascript" charset="utf-8">
-  var load_<%= @id %>;
-  $(document).ready(function() {
-    
-    var tpl_<%= @id %> = Tempo.prepare('<%= @id %>').notify(function(event) {
-        if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
-					$('ol#<%= @id %>').toggleClass('loading');
-				}
-			});
-   
-    load_<%= @id %> = function(){
-      tpl_<%= @id %>.starting();
+   var tpl_<%= @id %>;
+  
+    var load_<%= @id %> = function(){
+     
       var url_<%= @id %>;
       <% unless(@params[:url_from_element_id]).nil? %>
         var url_<%= @id %> = $("#<%= @params[:url_from_element_id] %>").val();
@@ -27,11 +20,22 @@
         dataType: "json",
         timeout: 7000,
         success: function(data) {
-          tpl_<%= @id %>.render(data<%=@node_json_result_element%>);
+          <%= js_handler %>(data);
         },
-        error: function(data){$('ol#tweets').toggleClass('loading');$('ol#tweets .error').show();}
+        error: function(data){ $('ol#<%= @id %> .error').show();}
       });
-    }
-    load_<%= @id %>();
+  }
+  var <%= js_handler %> = function(data){ 
+    tpl_<%= @id %>.starting();
+    tpl_<%= @id %>.render(data<%=@node_json_result_element%>);
+  };
+  $(document).ready(function() {
+    tpl_<%= @id %> = Tempo.prepare('<%= @id %>').notify(function(event) {
+      if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
+       $('ol#<%= @id %>').toggleClass('loading');
+      }
+    });
+    <%= "load_#{@id}();" unless @json_source_url.nil? %>
+    
   });
 </script>
