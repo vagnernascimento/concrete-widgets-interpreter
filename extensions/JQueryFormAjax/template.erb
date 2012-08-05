@@ -1,13 +1,15 @@
 <script>
    showResponse = function(responseText, statusText, xhr, $form)  { 
     <% if @target.respond_to?(:js_handler) %>
+      $('#<%= @target.id %>').toggleClass('loading');
       <%= @target.js_handler %>(responseText);
+     
     <% end %>
     }
   $(document).ready(function() { 
     var options = { 
         target:        '#<%= @target.id %>',   // target element(s) to be updated with server response 
-        //beforeSubmit:  showRequest,  // pre-submit callback 
+        beforeSubmit:  function(){$('#<%= @target.id %>').toggleClass('loading');},  // pre-submit callback 
         success:       showResponse,  // post-submit callback 
  
         dataType:  '<%= @data_type %>' // 'xml', 'script', or 'json' (expected server response type) 

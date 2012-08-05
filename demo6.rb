@@ -2,14 +2,14 @@ require  "concrete-widget/Interpreter.rb"
     
    interface_schema = { 
       :name => 'main_page', 
-      :node_content => {:concrete_widget => "HTMLPage", :params => {:title => "My Demo page", :include_css=> ["css/default_interface.css"] }},
+      :node_content => {:concrete_widget => "HTMLPage", :params => {:title => "SPARQL Viewer", :include_css=> ["css/default_interface.css"] }},
       :children => [
         { :name => 'header',
           :node_content => {:concrete_widget => "HTMLComposition", :params => {:css_class => "header"}},
           :children => [
             { :name => "main_heading",
               :node_content => { :concrete_widget => "HTMLHeading", :params => {:number => 1, 
-              :content => "Twitts about Anything", :css_class => "heading2"}}
+              :content => "SPARQL Viewer", :css_class => "heading2"}}
             }
           ]
         },
@@ -18,7 +18,7 @@ require  "concrete-widget/Interpreter.rb"
           :node_content => {
             :concrete_widget => "HTMLForm",
             
-            :params => {:css_class => "box center", :action => "http://search.twitter.com/search.json?&callback=?", :method => "get"}
+            :params => {:css_class => "box center", :action => "http://dbpedia.org/sparql/", :method => "get"}
           },
           :children => [
             {
@@ -29,20 +29,23 @@ require  "concrete-widget/Interpreter.rb"
             },
             {
               :name => 'query',
-              :node_content => {:concrete_widget => "HTMLFormInput", 
-              :params => {:name => 'q', :css_class => "input", :content => "type query"}},
+              :node_content => {:concrete_widget => "HTMLFormText", 
+              :params => { :css_class => "search_box", 
+              #:content => "SELECT ?film WHERE { ?film <http://purl.org/dc/terms/subject> <http://dbpedia.org/resource/Category:French_films> }"
+              :content => "SELECT ?prop ?val WHERE { <http://dbpedia.org/resource/Dona_Flor_and_Her_Two_Husbands> ?prop ?val }"
+              }},
               
             },
             {
-              :name => 'items_per_page_label',
+              :name => 'format_label',
               :node_content => {:concrete_widget => "HTMLLabel", 
-              :params => {:content => "Items per page: "}},
+              :params => {:content => "Format: "}},
               
             },
             {
-              :name => 'items_per_page',
+              :name => 'format',
               :node_content => {:concrete_widget => "HTMLFormSelect", 
-              :params => {:name => 'rpp', :css_class => "input", :options => ["5", "10", "15", "20", "25", "30"] }},
+              :params => {:name => 'format', :options => ["json"] }},
               
             },
             {
@@ -54,36 +57,32 @@ require  "concrete-widget/Interpreter.rb"
           ]
         },
         {
-          :name => 'tweets',
+          :name => 'dbpedia_result',
           :node_content => {
-            :concrete_widget => "JQueryTempoTemplateEngine",
-            #:concrete_widget => "HTMLComposition",            
+            :concrete_widget => "JQueryTempoTemplateEngine", 
             :params => {
               #:json_source_url => "http://search.twitter.com/search.json?q=web interfaces&rpp=20&callback=?",
               :url_from_element_id => 'url_search_twitter',
-              :node_json_result_element => "['results']", :msg_error => "Sorry"
+              :node_json_result_element => "['results']['bindings']", :msg_error => "Sorry"
             }
           },
           :children => [
             {
-              :name => 'twitt',
+              :name => 'attribute',
               :node_content => {:concrete_widget => "HTMLListItem", :params => {:css_class => "row"}},
               :children => [
                 { :name => "columnA",
                   :node_content => { :concrete_widget => "HTMLComposition", :params => {:css_class => "column grid_4 user"} },
                   :children => [
-                    { :name => "profile_image_url",
-                      :node_content => { :concrete_widget => "HTMLImage", :params => {:content => "{{profile_image_url}}"}}
-                    },
                     { :name => "from_user",
-                      :node_content => { :concrete_widget => "HTMLHeading", :params => { :number => 3, :content => "{{from_user}}"}}
+                      :node_content => { :concrete_widget => "HTMLSpan", :params => {:css_class => 'xxx_{{_tempo.index}}',  :content => "{{prop.value}}"}}
                     },
                 ]},
                 { :name => "columnB",
                   :node_content => { :concrete_widget => "HTMLParagraph", :params => {:content => "{{text}}", :css_class => "column grid_8"} },
                   :children => [
                     { :name => "created_at",
-                      :node_content => { :concrete_widget => "HTMLSpan", :params => {:content => ",{{created_at | date '\\at HH:mm on EEEE' }}", :css_class => "time"}}
+                      :node_content => { :concrete_widget => "HTMLSpan", :params => {:content => ": {{val.value}}", :css_class => "time"}}
                     } 
                   ]
                 },
@@ -106,13 +105,13 @@ require  "concrete-widget/Interpreter.rb"
     } 
     
     extensions= [
-      {:name => 'ext2', :extension => 'JQueryFormAjax', :nodes => ['form_search'], :params => {:target => "tweets"}},
+      {:name => 'ext2', :extension => 'JQueryFormAjax', :nodes => ['form_search'], :params => {:target => "dbpedia_result", :data_type => "json"}},
     ]
     
     interface = ConcreteWidget::Interface.new(interface_schema)
     interface.add_extensions(extensions)
    
-    File.open "demo-page5.html", "w" do |file|  
+    File.open "demo-page6.html", "w" do |file|  
       file.write interface.render
     end  
 

@@ -117,6 +117,13 @@ module ConcreteWidget
       end
     end
     
+    def widget_instance(name, params)
+      #load "concrete-widget/#{name}/#{name}.rb"
+      require "concrete-widget/#{name}/#{name}"
+      klass = eval(name)
+      klass.new(params) unless klass.nil?
+    end
+    
   end
   
   class Extension < WidgetBase

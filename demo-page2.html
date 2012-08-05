@@ -28,13 +28,13 @@
   <label for="" class="">Field1:</label><input type="text" class="" name="input1" id="input1" value="Lorem Ypsum"/>
 <br class="" id="ext2"/>
 <script>
-  $('#input1').change(function(){ $('#long_text').val(this.value) });
+  $('#input1').change(function(){ $('#long_text').val(this.value);$('#long_text').html(this.value) });
 </script>
 
 <label for="" class="">Field2:</label><select class="" name="select1" id="select1"><option value="First">first</option><option>second</option><option value="Last" selected="selected">Last</option></select>
 <br class="" id="ext2"/>
 <script>
-  $('#select1').change(function(){ $('#long_text').val(this.value) });
+  $('#select1').change(function(){ $('#long_text').val(this.value);$('#long_text').html(this.value) });
 </script>
 
 <textarea class="" name="long_text" id="long_text">Lorem Ypsum</textarea>

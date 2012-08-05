@@ -1,0 +1,39 @@
+<%=  self.widget_instance("HTMLFormSelect", @params).render %>
+<% unless @params[:on_change].nil? %>
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    $('#<%=@id%>').change(function() {
+      var url = "<%= @params[:on_change][:request_json_url] %>";
+      url = url.replace(/{{value}}/g, this.value);
+      $.ajax({
+        url: url,
+        <% unless @params[:on_change][:data_type].nil? %>
+        dataType: "<%= @params[:on_change][:data_type] %>", 
+        <% end %>
+        cache: true,        
+        type : "<%= @params[:method] || 'GET' %>",
+        beforeSend: function(data) {$('#<%= @params[:on_change][:target] %>').toggleClass('loading');},
+        complete: function(data) {$('#<%= @params[:on_change][:target] %>').toggleClass('loading');},
+         
+        success: function(data) {
+          var select_target = $('#<%= @params[:on_change][:target]%>');
+          <% if @params[:on_change][:clear_target] %>
+          select_target.find('option').remove();
+          <% end %>
+          var results = data<%= @params[:on_change][:json_results_node]%>;
+         
+          if(typeof(results) == 'object' && results.length > 0){
+            $.each(results, function(i, item) {
+              var option = item<%= @params[:on_change][:item_option]%>;
+              var value = item<%= @params[:on_change][:item_value]%>;
+              select_target.append(new Option(option, value, true, true));
+            });
+          }
+      },
+      error: function(x,y,z){ alert(x); }
+      });
+      
+    });
+  });
+</script>  
+<% end %>

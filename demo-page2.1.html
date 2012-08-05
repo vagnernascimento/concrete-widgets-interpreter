@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+   <HEAD>
+      <TITLE>My Demo page </TITLE>
+	    
+        <link type="text/css" href="css/default_interface.css" rel="stylesheet" />
+	  
+        
+        <script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
+	  
+	  
+   </HEAD>
+   <BODY>
+      <div id="header" class="header">
+    <h1 id="first_heading" class="heading2">Select your Sushi </h1/>
+
+</div>
+<form action="http://www.google.com" class="box" name="comp1" id="comp1" method="post">
+  <label for="" class="column grid_3">The biggest US Cities:</label><select class="" name="cities" id="cities"><option>New York</option><option>Los Angeles</option><option>Chicago</option><option>Houston</option><option>Philadelphia</option><option>Phoenix</option><option>San Antonio</option><option>San Diego</option><option>Dallas</option><option>San Jose</option><option>Jacksonville</option><option>Indianapolis</option><option>San Francisco</option><option>Austin</option><option>Columbus</option><option>Fort Worth</option><option>Charlotte</option><option>Detroit</option><option>El Paso</option><option>Memphis</option><option>Baltimore</option><option>Boston</option><option>Seattle</option><option>Washington</option><option>Nashville-Davidson</option><option>Denver</option><option>Louisville-Jefferson County</option><option>Milwaukee</option><option>Portland</option><option>Las Vegas</option><option>Oklahoma City</option><option>Albuquerque</option><option>Tucson</option><option>Fresno</option><option>Sacramento</option><option>Long Beach</option><option>Kansas City</option><option>Mesa</option><option>Virginia Beach</option><option>Atlanta</option><option>Colorado Springs</option><option>Omaha</option><option>Raleigh</option><option>Miami</option><option>Cleveland</option><option>Tulsa</option><option>Oakland</option><option>Minneapolis</option><option>Wichita</option><option>Arlington</option></select><script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    $('#cities').change(function() {
+      var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20local.search%20where%20query%3D%22sushi%22%20and%20location%3D%22{{value}}%22&format=json";
+      url = url.replace(/{{value}}/g, this.value);
+      $.ajax({
+        url: url,
+        
+        dataType: "text json", 
+        
+        cache: true,        
+        type : "GET",
+        beforeSend: function(data) {$('#restaurants').toggleClass('loading');},
+        complete: function(data) {$('#restaurants').toggleClass('loading');},
+         
+        success: function(data) {
+          var select_target = $('#restaurants');
+          
+          select_target.find('option').remove();
+          
+          var results = data['query']['results']['Result'];
+         
+          if(typeof(results) == 'object' && results.length > 0){
+            $.each(results, function(i, item) {
+              var option = item['Title'];
+              var value = item['MapUrl'];
+              select_target.append(new Option(option, value, true, true));
+            });
+          }
+      },
+      error: function(x,y,z){ alert(x); }
+      });
+      
+    });
+  });
+</script>  
+
+<br class="" id="ext2"/><label for="" class="column grid_3">Sushi restaurants:</label><select class="" name="restaurants" id="restaurants"><option>Choose a sushi</option></select>
+<br class="" id="ext2"/>
+<script>
+  $('#restaurants').change(function(){ $('#map_url').val(this.value);$('#map_url').html(this.value) });
+</script>
+
+<label for="" class="column grid_3">Map URL:</label><span class="" id="map_url">  </span>
+
+</form>
+  
+<span class="" id="ps"> * Data from http://developer.yahoo.com/yql/console </span>
+	  
+   </BODY>
+</HTML>

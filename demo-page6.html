@@ -2,7 +2,7 @@
    "http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
    <HEAD>
-      <TITLE>My Demo page </TITLE>
+      <TITLE>SPARQL Viewer </TITLE>
 	    
         <link type="text/css" href="css/default_interface.css" rel="stylesheet" />
 	  
@@ -19,26 +19,26 @@
    </HEAD>
    <BODY>
       <div id="header" class="header">
-    <h1 id="main_heading" class="heading2">Twitts about Anything </h1/>
+    <h1 id="main_heading" class="heading2">SPARQL Viewer </h1/>
 
 </div>
-<form action="http://search.twitter.com/search.json?&callback=?" class="box center" name="form_search" id="form_search" method="get">
-  <label for="" class="">Search: </label><input type="text" class="input" name="q" id="query" value="type query"/><label for="" class="">Items per page: </label><select class="input" name="rpp" id="items_per_page"><option>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>30</option></select><input type="submit" class="input" name="btn_send" id="btn_send" value="Go"/>
+<form action="http://dbpedia.org/sparql/" class="box center" name="form_search" id="form_search" method="get">
+  <label for="" class="">Search: </label><textarea class="search_box" name="query" id="query">SELECT ?prop ?val WHERE { &lt;http://dbpedia.org/resource/Dona_Flor_and_Her_Two_Husbands&gt; ?prop ?val }</textarea><label for="" class="">Format: </label><select class="" name="format" id="format"><option>json</option></select><input type="submit" class="input" name="btn_send" id="btn_send" value="Go"/>
 </form>
   
 
 <script>
    showResponse = function(responseText, statusText, xhr, $form)  { 
     
-      $('#tweets').toggleClass('loading');
-      tweets_handler(responseText);
+      $('#dbpedia_result').toggleClass('loading');
+      dbpedia_result_handler(responseText);
      
     
     }
   $(document).ready(function() { 
     var options = { 
-        target:        '#tweets',   // target element(s) to be updated with server response 
-        beforeSubmit:  function(){$('#tweets').toggleClass('loading');},  // pre-submit callback 
+        target:        '#dbpedia_result',   // target element(s) to be updated with server response 
+        beforeSubmit:  function(){$('#dbpedia_result').toggleClass('loading');},  // pre-submit callback 
         success:       showResponse,  // post-submit callback 
  
         dataType:  'json' // 'xml', 'script', or 'json' (expected server response type) 
@@ -57,14 +57,13 @@
 }); 
 </script>
 
-<ol id="tweets">
+<ol id="dbpedia_result">
   <dd data-template style="display: none;">
-    <li class="row" id="twitt" title="" > <div id="columnA" class="column grid_4 user">
-    <img class="" id="profile_image_url" src="{{profile_image_url}}" data-src="{{profile_image_url}}" title="" />
-<h3 id="from_user" class="">{{from_user}} </h3/>
+    <li class="row" id="attribute" title="" > <div id="columnA" class="column grid_4 user">
+    <span class="xxx_{{_tempo.index}}" id="from_user"><a href="#" onclick="alert(__._tempo.index); return false;">{{prop.value}}</a> </span>
 
 </div>
-<p id="columnB" class="column grid_8">{{text}}<span class="time" id="created_at"> ,{{created_at | date '\at HH:mm on EEEE' }} </span>
+<p id="columnB" class="column grid_8">{{text}}<span class="time" id="created_at"> : {{val.value}} </span>
 </p>
  </li>
 
@@ -74,32 +73,32 @@
   </dd>
 </ol>
 <script type="text/javascript" charset="utf-8">
-   var tpl_tweets;
+   var tpl_dbpedia_result;
   
-    var load_tweets = function(){
+    var load_dbpedia_result = function(){
      
-      var url_tweets;
+      var url_dbpedia_result;
       
-        var url_tweets = $("#url_search_twitter").val();
+        var url_dbpedia_result = $("#url_search_twitter").val();
       
       $.ajax({
-        url: url_tweets ? url_tweets : "",
+        url: url_dbpedia_result ? url_dbpedia_result : "",
         dataType: "json",
         timeout: 7000,
         success: function(data) {
-          tweets_handler(data);
+          dbpedia_result_handler(data);
         },
-        error: function(data){ $('ol#tweets .error').show();}
+        error: function(data){ $('ol#dbpedia_result .error').show();}
       });
   }
-  var tweets_handler = function(data){ 
-    tpl_tweets.starting();
-    tpl_tweets.render(data['results']);
+  var dbpedia_result_handler = function(data){ 
+    tpl_dbpedia_result.starting();
+    tpl_dbpedia_result.render(data['results']['bindings']);
   };
   $(document).ready(function() {
-    tpl_tweets = Tempo.prepare('tweets').notify(function(event) {
+    tpl_dbpedia_result = Tempo.prepare('dbpedia_result').notify(function(event) {
       if (event.type === TempoEvent.Types.RENDER_STARTING || event.type === TempoEvent.Types.RENDER_COMPLETE) {
-       $('ol#tweets').toggleClass('loading');
+       $('ol#dbpedia_result').toggleClass('loading');
       }
     });
     
