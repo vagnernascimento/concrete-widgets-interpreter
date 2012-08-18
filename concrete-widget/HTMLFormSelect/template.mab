@@ -1,4 +1,4 @@
-select :class => @css_class, :name => @name, :id => @id do
+select :class => @css_class, :name => @name, :onchange => @params[:on_change], :id => @id do
   @options.each do |option_attr|
     if option_attr.is_a? String
       option option_attr

@@ -31,14 +31,14 @@
   $('#input1').change(function(){ $('#long_text').val(this.value);$('#long_text').html(this.value) });
 </script>
 
-<label for="" class="">Field2:</label><select class="" name="select1" id="select1"><option value="First">first</option><option>second</option><option value="Last" selected="selected">Last</option></select>
+<label for="" class="">Field2:</label><select class="" name="select1" onchange="" id="select1"><option value="First">first</option><option>second</option><option value="Last" selected="selected">Last</option></select>
 <br class="" id="ext2"/>
 <script>
   $('#select1').change(function(){ $('#long_text').val(this.value);$('#long_text').html(this.value) });
 </script>
 
 <textarea class="" name="long_text" id="long_text">Lorem Ypsum</textarea>
-<br class="" id="ext2"/>Yes<input type="checkbox" value="Yes" class="" name="checks" id="checks_0"/>No<input type="checkbox" value="No" class="" name="checks" id="checks_1"/>Other<input type="checkbox" value="O" class="" name="checks" id="checks_2"/><input type="submit" class="" name="sendbnt" id="sendbnt" value="Send"/>
+<br class="" id="ext2"/>Yes<input type="checkbox" value="Yes" class="" name="checks" id="checks_0"/>No<input type="checkbox" value="No" class="" name="checks" id="checks_1"/>Other<input type="checkbox" value="O" class="" name="checks" checked="checked" id="checks_2"/><input type="radio" value="First" class="" name="radios" id="radios_0"/>First<input type="radio" value="Second" class="" name="radios" id="radios_1"/>Second<input type="radio" value="T" class="" name="radios" checked="checked" id="radios_2"/>Third<input type="submit" class="" name="sendbnt" id="sendbnt" value="Send"/>
 </form>
   
 </p>

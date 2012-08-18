@@ -5,7 +5,7 @@
     text item if @label_side == 'right'
   elsif item.is_a? Hash
     text item[:label] if @label_side == 'left'
-    input :type => 'checkbox', :value => item[:value], :class => @css_class, :name => @name, :id => "#{@id}_#{@options.index(item)}"
+    input :type => 'checkbox', :value => item[:value], :class => @css_class, :name => @name, :checked => item[:checked], :id => "#{@id}_#{@options.index(item)}"
     text item[:label] if @label_side == 'right'
   end
 end unless @options.nil?

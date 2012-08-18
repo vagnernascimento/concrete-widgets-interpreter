@@ -57,7 +57,12 @@ require  "concrete-widget/Interpreter.rb"
                     },
                     {
                       :name => 'checks',
-                      :node_content => {:concrete_widget => "HTMLFormCheck", :params => {:options => ['Yes', 'No',{:label => 'Other', :value => 'O'}], :label_side => 'left'}},
+                      :node_content => {:concrete_widget => "HTMLFormCheck", :params => {:options => ['Yes', 'No',{:label => 'Other', :value => 'O', :checked => true}], :label_side => 'left'}},
+                    
+                    },
+                    {
+                      :name => 'radios',
+                      :node_content => {:concrete_widget => "HTMLFormRadio", :params => {:options => ['First', 'Second',{:label => 'Third', :value => 'T', :checked => true}], :label_side => 'right'}},
                     
                     },
                     {
