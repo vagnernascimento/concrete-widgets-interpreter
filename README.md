@@ -11,6 +11,8 @@ Dependencies
     - Tilt
       gem install tilt
       https://github.com/rtomayko/tilt
+    - Markaby
+      gem install markaby
     - RubyTree
       gem install rubytree
       http://rubytree.rubyforge.org/
