@@ -175,8 +175,8 @@ td
 }
 
 .box1{border:1px solid #c0c0c0; margin:10px 10px 10px 20px;padding:10px 10px 10px 10px;}
-
-
+input[type="radio"]{float:left;}
+label.radio_label{display:block;margin:5px;}
 
 
 
